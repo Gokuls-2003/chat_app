@@ -23,7 +23,13 @@ class _LoginPageState extends State<LoginPage> {
               vertical: 20.0,
             ),
             child: Column(
-              children: [],
+              children: [_headerText()],
             )));
+  }
+
+  Widget _headerText() {
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width,
+    );
   }
 }
