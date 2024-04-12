@@ -25,10 +25,7 @@ class _LoginPageState extends State<LoginPage> {
               vertical: 20.0,
             ),
             child: Column(
-              children: [
-                _headerText(),
-                _loginForm(),
-              ],
+              children: [_headerText(), _loginForm(), _createAnAccountLink()],
             )));
   }
 
@@ -76,9 +73,44 @@ class _LoginPageState extends State<LoginPage> {
             CustomFormField(
               height: MediaQuery.sizeOf(context).height * 0.1,
               hintText: "Password",
-            )
+            ),
+            _loginButton()
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _loginButton() {
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width,
+      child: MaterialButton(
+          onPressed: () {},
+          color: Theme.of(context).colorScheme.primary,
+          child: const Text(
+            "Login",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )),
+    );
+  }
+
+  Widget _createAnAccountLink() {
+    return const Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text("don't have an account? "),
+          Text(
+            "Sign Up",
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+            ),
+          )
+        ],
       ),
     );
   }
