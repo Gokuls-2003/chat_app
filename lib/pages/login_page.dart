@@ -9,6 +9,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _loginFormKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         vertical: MediaQuery.sizeOf(context).height * 0.05,
       ),
       child: Form(
+        key: _loginFormKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
@@ -85,7 +88,9 @@ class _LoginPageState extends State<LoginPage> {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            if (_loginFormKey.currentState?.validate() ?? false) {}
+          },
           color: Theme.of(context).colorScheme.primary,
           child: const Text(
             "Login",

@@ -15,6 +15,7 @@ class CustomFormField extends StatelessWidget {
     return SizedBox(
       height: height,
       child: TextFormField(
+        validator: (value) {},
         decoration: InputDecoration(
             hintText: hintText, border: const OutlineInputBorder()),
       ),
