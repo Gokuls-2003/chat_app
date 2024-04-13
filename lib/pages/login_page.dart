@@ -1,3 +1,4 @@
+import 'package:chat_app/const.dart';
 import 'package:chat_app/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -70,12 +71,13 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomFormField(
-              height: MediaQuery.sizeOf(context).height * 0.1,
-              hintText: "Email",
-            ),
+                height: MediaQuery.sizeOf(context).height * 0.1,
+                hintText: "Email",
+                validationRegEx: EMAIL_VALIDATION_REGEX),
             CustomFormField(
               height: MediaQuery.sizeOf(context).height * 0.1,
               hintText: "Password",
+              validationRegEx: PASSWORD_VALIDATION_REGEX,
             ),
             _loginButton()
           ],
