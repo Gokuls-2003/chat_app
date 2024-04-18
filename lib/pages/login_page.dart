@@ -1,6 +1,8 @@
 import 'package:chat_app/const.dart';
+import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,9 +12,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GetIt getIt = GetIt.instance;
   final GlobalKey<FormState> _loginFormKey = GlobalKey();
 
+  late AuthService _authService;
+
+  String? email, password;
+
   @override
+  @override
+  void initState() {
+    super.initState();
+    _authService = getIt.get<AuthService>();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -71,13 +84,25 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomFormField(
-                height: MediaQuery.sizeOf(context).height * 0.1,
-                hintText: "Email",
-                validationRegEx: EMAIL_VALIDATION_REGEX),
+              height: MediaQuery.sizeOf(context).height * 0.1,
+              hintText: "Email",
+              validationRegEx: EMAIL_VALIDATION_REGEX,
+              onSaved: (value) {
+                setState(() {
+                  email = value;
+                });
+              },
+            ),
             CustomFormField(
               height: MediaQuery.sizeOf(context).height * 0.1,
               hintText: "Password",
               validationRegEx: PASSWORD_VALIDATION_REGEX,
+              onSaved: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
+              obscureText: true,
             ),
             _loginButton()
           ],
@@ -90,8 +115,14 @@ class _LoginPageState extends State<LoginPage> {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       child: MaterialButton(
-          onPressed: () {
-            if (_loginFormKey.currentState?.validate() ?? false) {}
+          onPressed: () async {
+            if (_loginFormKey.currentState?.validate() ?? false) {
+              _loginFormKey.currentState?.save();
+              bool result = await _authService.login(email!, password!);
+              print(result);
+              if (result) {
+              } else {}
+            }
           },
           color: Theme.of(context).colorScheme.primary,
           child: const Text(
