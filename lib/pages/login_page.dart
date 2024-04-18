@@ -1,4 +1,5 @@
 import 'package:chat_app/const.dart';
+import 'package:chat_app/service/alter_service.dart';
 import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/navigation_service.dart';
 import 'package:chat_app/widgets/custom_form_field.dart';
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
 
   late AuthService _authService;
   late NavigationService _navigationService;
+  late AlterService _alterService;
 
   String? email, password;
 
@@ -27,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _authService = getIt.get<AuthService>();
     _navigationService = getIt.get<NavigationService>();
+    _alterService = getIt.get<AlterService>();
   }
 
   Widget build(BuildContext context) {
@@ -125,7 +128,11 @@ class _LoginPageState extends State<LoginPage> {
               print(result);
               if (result) {
                 _navigationService.pushReplacementNamed('/home');
-              } else {}
+              } else {
+                _alterService.showToast(
+                    text: "Failed to Login, Please Try Agin!",
+                    icon: Icons.error);
+              }
             }
           },
           color: Theme.of(context).colorScheme.primary,

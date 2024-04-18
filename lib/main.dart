@@ -1,3 +1,4 @@
+import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/navigation_service.dart';
 import 'package:chat_app/utils.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,13 @@ Future<void> setup() async {
 
 class MyApp extends StatelessWidget {
   final GetIt _getIt = GetIt.instance;
+
   late NavigationService _navigationService;
+  late AuthService _authService;
+
   MyApp({super.key}) {
     _navigationService = _getIt.get<NavigationService>();
+    _authService = _getIt.get<AuthService>();
   }
 
   // This widget is the root of your application.
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      initialRoute: "/login",
+      initialRoute: _authService.user != null ? "/home" : "/login",
       routes: _navigationService.routes,
     );
   }
