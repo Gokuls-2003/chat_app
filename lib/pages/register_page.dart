@@ -172,7 +172,8 @@ class _RegisterPageState extends State<RegisterPage> {
             isLoading = true;
           });
           try {
-            if ((_registerFormKey.currentState?.validate() ?? false)) {
+            if ((_registerFormKey.currentState?.validate() ?? false) &&
+                selectedImage != null) {
               _registerFormKey.currentState?.save();
               bool result = await _authService.signup(email!, password!);
               if (result) {
