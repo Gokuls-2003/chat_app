@@ -1,4 +1,11 @@
+import 'dart:io';
+
+import 'package:chat_app/const.dart';
+import 'package:chat_app/service/media_service.dart';
+import 'package:chat_app/service/navigation_service.dart';
+import 'package:chat_app/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -8,7 +15,20 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  String? email, password, name;
+
+  final GetIt _getIt = GetIt.instance;
+  late MediaService _mediaService;
+  late NavigationService _navigationService;
+
+  File? selectedImage;
   @override
+  void initState() {
+    super.initState();
+    _mediaService = _getIt.get<MediaService>();
+    _navigationService = _getIt.get<NavigationService>();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -24,6 +44,8 @@ class _RegisterPageState extends State<RegisterPage> {
         children: [
           _headerText(),
           _registerForm(),
+          _registerButton(),
+          _loginAccountLink()
         ],
       ),
     ));
@@ -61,16 +83,106 @@ class _RegisterPageState extends State<RegisterPage> {
           vertical: MediaQuery.sizeOf(context).height * 0.05),
       child: Form(
           child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _pfpSelection(),
+          CustomFormField(
+            hintText: "Name",
+            height: MediaQuery.sizeOf(context).height * 0.1,
+            validationRegEx: NAME_VALIDATION_REGEX,
+            onSaved: (value) {
+              setState(
+                () {
+                  name = value;
+                },
+              );
+            },
+          ),
+          CustomFormField(
+            hintText: "Email",
+            height: MediaQuery.sizeOf(context).height * 0.1,
+            validationRegEx: EMAIL_VALIDATION_REGEX,
+            onSaved: (value) {
+              setState(
+                () {
+                  email = value;
+                },
+              );
+            },
+          ),
+          CustomFormField(
+            hintText: "password",
+            height: MediaQuery.sizeOf(context).height * 0.1,
+            validationRegEx: PASSWORD_VALIDATION_REGEX,
+            onSaved: (value) {
+              setState(
+                () {
+                  password = value;
+                },
+              );
+            },
+          )
         ],
       )),
     );
   }
 
   Widget _pfpSelection() {
-    return CircleAvatar(
-      radius: MediaQuery.of(context).size.width * 0.15,
+    return GestureDetector(
+      onTap: () async {
+        File? file = await _mediaService.getImageFromGallery();
+        if (file != null) {
+          setState(() {
+            selectedImage = file;
+          });
+        }
+      },
+      child: CircleAvatar(
+        radius: MediaQuery.of(context).size.width * 0.15,
+        backgroundImage: selectedImage != null
+            ? FileImage(selectedImage!)
+            : NetworkImage(PLACEHOLDER_PFP) as ImageProvider,
+      ),
+    );
+  }
+
+  Widget _registerButton() {
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width,
+      child: MaterialButton(
+        color: Theme.of(context).colorScheme.primary,
+        onPressed: () {},
+        child: const Text(
+          "Register",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginAccountLink() {
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text("Already have an account? "),
+          GestureDetector(
+            onTap: () {
+              _navigationService.goBack();
+            },
+            child: const Text(
+              "Login",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
