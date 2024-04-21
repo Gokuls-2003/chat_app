@@ -3,6 +3,7 @@ import 'package:chat_app/service/alter_service.dart';
 import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/media_service.dart';
 import 'package:chat_app/service/navigation_service.dart';
+import 'package:chat_app/service/storage_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,5 +25,9 @@ Future<void> registerServices() async {
 
   getIt.registerSingleton<MediaService>(
     MediaService(),
+  );
+
+  getIt.registerSingleton<StorageService>(
+    StorageService(),
   );
 }

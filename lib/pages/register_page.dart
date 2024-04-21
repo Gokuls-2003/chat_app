@@ -4,6 +4,7 @@ import 'package:chat_app/const.dart';
 import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/media_service.dart';
 import 'package:chat_app/service/navigation_service.dart';
+import 'package:chat_app/service/storage_service.dart';
 import 'package:chat_app/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -24,6 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late AuthService _authService;
   late MediaService _mediaService;
   late NavigationService _navigationService;
+  late StorageService _storageService;
 
   File? selectedImage;
   bool isLoading = false;
@@ -33,6 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _mediaService = _getIt.get<MediaService>();
     _navigationService = _getIt.get<NavigationService>();
     _authService = _getIt.get<AuthService>();
+    _storageService = _getIt.get<StorageService>();
   }
 
   Widget build(BuildContext context) {
@@ -177,7 +180,8 @@ class _RegisterPageState extends State<RegisterPage> {
               _registerFormKey.currentState?.save();
               bool result = await _authService.signup(email!, password!);
               if (result) {
-                print(result);
+                String? pfpURL = await _storageService.uploadUserPfp(
+                    file: selectedImage!, uid: _authService.user!.uid);
               }
             }
           } catch (e) {
