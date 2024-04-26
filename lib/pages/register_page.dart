@@ -29,8 +29,8 @@ class _RegisterPageState extends State<RegisterPage> {
   late MediaService _mediaService;
   late NavigationService _navigationService;
   late StorageService _storageService;
-  late DatabaseService _databaseService;
   late AlterService _alertService;
+  late DatabaseService _databaseService;
 
   File? selectedImage;
   bool isLoading = false;
@@ -41,10 +41,11 @@ class _RegisterPageState extends State<RegisterPage> {
     _navigationService = _getIt.get<NavigationService>();
     _authService = _getIt.get<AuthService>();
     _storageService = _getIt.get<StorageService>();
-    _databaseService = _getIt.get<DatabaseService>();
     _alertService = _getIt.get<AlterService>();
+    _databaseService = _getIt.get<DatabaseService>();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
