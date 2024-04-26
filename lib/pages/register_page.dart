@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:chat_app/const.dart';
+import 'package:chat_app/models/user_profile.dart';
+import 'package:chat_app/service/alter_service.dart';
 import 'package:chat_app/service/auth_service.dart';
+import 'package:chat_app/service/database_service.dart';
 import 'package:chat_app/service/media_service.dart';
 import 'package:chat_app/service/navigation_service.dart';
 import 'package:chat_app/service/storage_service.dart';
@@ -26,6 +29,8 @@ class _RegisterPageState extends State<RegisterPage> {
   late MediaService _mediaService;
   late NavigationService _navigationService;
   late StorageService _storageService;
+  late DatabaseService _databaseService;
+  late AlterService _alertService;
 
   File? selectedImage;
   bool isLoading = false;
@@ -36,6 +41,8 @@ class _RegisterPageState extends State<RegisterPage> {
     _navigationService = _getIt.get<NavigationService>();
     _authService = _getIt.get<AuthService>();
     _storageService = _getIt.get<StorageService>();
+    _databaseService = _getIt.get<DatabaseService>();
+    _alertService = _getIt.get<AlterService>();
   }
 
   Widget build(BuildContext context) {
@@ -182,6 +189,17 @@ class _RegisterPageState extends State<RegisterPage> {
               if (result) {
                 String? pfpURL = await _storageService.uploadUserPfp(
                     file: selectedImage!, uid: _authService.user!.uid);
+                if (pfpURL != null) {
+                  await _databaseService.createUserProfile(
+                      userProfile: UserProfile(
+                          uid: _authService.user!.uid,
+                          name: name,
+                          pfpURL: pfpURL));
+                  _alertService.showToast(
+                    text: "User registered Successfully",
+                    icon: Icons.check,
+                  );
+                }
               }
             }
           } catch (e) {
