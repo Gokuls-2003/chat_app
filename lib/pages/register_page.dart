@@ -200,14 +200,18 @@ class _RegisterPageState extends State<RegisterPage> {
                       text: "User registered successfully!", icon: Icons.check);
                   _navigationService.goBack();
                   _navigationService.pushReplacementNamed("/home");
+                } else {
+                  throw Exception("Unable to upload user profile picture");
                 }
+              } else {
+                throw Exception("Unable to register user");
               }
             }
           } catch (e) {
             print(e);
             _alertService.showToast(
                 text: "Failed to register, please try again!",
-                icon: Icons.check);
+                icon: Icons.error);
           }
           setState(() {
             isLoading = false;
