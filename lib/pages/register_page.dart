@@ -197,14 +197,17 @@ class _RegisterPageState extends State<RegisterPage> {
                           name: name,
                           pfpURL: pfpURL));
                   _alertService.showToast(
-                    text: "User registered Successfully",
-                    icon: Icons.check,
-                  );
+                      text: "User registered successfully!", icon: Icons.check);
+                  _navigationService.goBack();
+                  _navigationService.pushReplacementNamed("/home");
                 }
               }
             }
           } catch (e) {
             print(e);
+            _alertService.showToast(
+                text: "Failed to register, please try again!",
+                icon: Icons.check);
           }
           setState(() {
             isLoading = false;
