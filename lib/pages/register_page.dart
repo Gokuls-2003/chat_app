@@ -201,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   _navigationService.goBack();
                   _navigationService.pushReplacementNamed("/home");
                 } else {
-                  throw Exception("Unable to upload user profile picture");
+                  throw Exception("Unable to upload profile picture of user");
                 }
               } else {
                 throw Exception("Unable to register user");
