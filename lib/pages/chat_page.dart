@@ -108,19 +108,16 @@ class _ChatPageState extends State<ChatPage> {
       if (m.messageType == MessageType.Image) {
         return ChatMessage(
             user: m.senderID == currentUser!.id ? currentUser! : otherUser!,
-            createdAt: m.sentAt!.toDate());
-      } else {
-        return ChatMessage(
-            user: m.senderID == currentUser!.id ? currentUser! : otherUser!,
-            text: m.content!,
             createdAt: m.sentAt!.toDate(),
             medias: [
-              ChatMedia(
-                url: m.content!,
-                fileName: "",
-                type: MediaType.image,
-              )
+              ChatMedia(url: m.content!, fileName: "", type: MediaType.image)
             ]);
+      } else {
+        return ChatMessage(
+          user: m.senderID == currentUser!.id ? currentUser! : otherUser!,
+          text: m.content!,
+          createdAt: m.sentAt!.toDate(),
+        );
       }
     }).toList();
     chatMessage.sort((a, b) {
