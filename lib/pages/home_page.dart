@@ -74,15 +74,25 @@ class _HomePageState extends State<HomePage> {
               child: Text("Unable to load Data."),
             );
           }
-          final users = snapshot.data!.docs;
           if (snapshot.hasData && snapshot.data != null) {
+            final users = snapshot.data!.docs;
             return ListView.builder(
                 itemCount: users.length,
                 itemBuilder: (context, index) {
                   UserProfile user = users[index].data();
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: ChatTile(userProfile: user, onTap: () {}),
+                    child: ChatTile(
+                        userProfile: user,
+                        onTap: () async {
+                          final ChatExists =
+                              await _databaseService.checkChatExists(
+                                  _authService.user!.uid, user.uid!);
+                          if (!ChatExists) {
+                            await _databaseService.createNewChat(
+                                _authService.user!.uid, user.uid!);
+                          }
+                        }),
                   );
                 });
           }
