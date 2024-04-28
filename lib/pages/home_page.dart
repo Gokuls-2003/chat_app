@@ -1,7 +1,9 @@
+import 'package:chat_app/models/user_profile.dart';
 import 'package:chat_app/service/alter_service.dart';
 import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/database_service.dart';
 import 'package:chat_app/service/navigation_service.dart';
+import 'package:chat_app/widgets/chat_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -72,9 +74,17 @@ class _HomePageState extends State<HomePage> {
               child: Text("Unable to load Data."),
             );
           }
-          print(snapshot.data);
+          final users = snapshot.data!.docs;
           if (snapshot.hasData && snapshot.data != null) {
-            return ListView();
+            return ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  UserProfile user = users[index].data();
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: ChatTile(userProfile: user, onTap: () {}),
+                  );
+                });
           }
           return const Center(
             child: CircularProgressIndicator(),
